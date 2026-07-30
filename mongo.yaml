@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+  labels:
+    app: mongo
+spec:
+  replicas: 1  # how many pods you want to create
+  selector:
+    matchLabels:
+      app: mongo
+  template:  # this is the pod template -> blueprint for the pod
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:8
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-root-username
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-root-password
+
+---  # you can have multiple YAML configurations in a single file, separated by '---'
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:  # select the pods that this service will route traffic to
+    app: mongo
+  ports:
+    - protocol: TCP
+      port: 27017  # the port that the service will expose
+      targetPort: 27017  # the port on the pod that the service will forward traffic to, same as containerPort in the deployment

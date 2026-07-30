@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    app: webapp
+spec:
+  replicas: 1  # how many pods you want to create
+  selector:
+    matchLabels:
+      app: webapp
+  template:  # this is the pod template -> blueprint for the pod
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: nanajanashia/k8s-demo-app:v1.0
+        ports:
+        - containerPort: 3000
+        env:
+        - name: USER_NAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-root-username
+        - name: USER_PWD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-root-password
+        - name: DB_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-config
+              key: mongo-url
+
+
+---  # you can have multiple YAML configurations in a single file, separated by '---'
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+spec:
+  type: NodePort  # this service will be exposed on a port on the node, so you can access it from outside the cluster
+  selector:  # select the pods that this service will route traffic to
+    app: webapp
+  ports:
+    - protocol: TCP
+      port: 3000  # the port that the service will expose
+      targetPort: 3000  # the port on the pod that the service will forward traffic to, same as containerPort in the deployment
+      nodePort: 30007  # the port on the node where the service will be exposed, must be between 30000-32767 for NodePort services
