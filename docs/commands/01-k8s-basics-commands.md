@@ -108,5 +108,28 @@ Expected: back to fully working.
 ## Cleanup (only if you want to remove everything from lesson 1)
 
 ```bash
+# Delete all resources defined in the lesson 1 folder
 kubectl delete -f lessons/01-k8s-basics/
+```
+
+```bash
+# Alternative: delete specific resource types
+kubectl delete deployment mongo-deployment
+kubectl delete deployment webapp-deployment
+kubectl delete service mongo-service
+kubectl delete service webapp-service
+kubectl delete configmap mongo-config
+kubectl delete secret mongo-secret
+```
+
+```bash
+# Verify everything is cleaned up
+kubectl get all
+```
+Expected: no resources related to mongo or webapp should remain.
+
+```bash
+# Nuclear option - delete ALL resources in the default namespace
+# (use with extreme caution!)
+kubectl delete all --all
 ```
