@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-config
+  labels:
+    # include pulls in the shared label block from _helpers.tpl; nindent 4 re-indents
+    # it to line up under "labels:" (Helm templates are plain text until rendered,
+    # so indentation has to be fixed manually like this).
+    {{- include "webapp-stack.labels" . | nindent 4 }}
+data:
+  mongo-url: mongo-service

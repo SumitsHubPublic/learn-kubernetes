@@ -1,0 +1,6 @@
+apiVersion: v2
+name: webapp-stack
+description: Mongo + Node/NestJS webapp stack for the k8s-intro learning project
+type: application
+version: 0.1.0
+appVersion: "1.0"

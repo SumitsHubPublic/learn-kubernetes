@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+  labels:
+    app: mongo
+    {{- include "webapp-stack.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+        # selectorLabels (not the full labels block) on purpose: these labels are
+        # matched by spec.selector above and by mongo-service.yaml. They must stay
+        # stable across chart upgrades, unlike helm.sh/chart or app.kubernetes.io/version.
+        {{- include "webapp-stack.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: mongodb
+        # quoting matters here: an unquoted tag like `8` would be valid, but tags
+        # such as `1.0` could otherwise be parsed as a YAML number and break.
+        image: "{{ .Values.mongo.image.repository }}:{{ .Values.mongo.image.tag }}"
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-root-username
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-root-password

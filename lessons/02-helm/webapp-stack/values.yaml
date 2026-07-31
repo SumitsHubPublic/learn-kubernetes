@@ -1,0 +1,30 @@
+# Default values for webapp-stack.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+#
+# NOTE: mongo.auth values below land in a Secret's `data:` as plain base64 via
+# the `b64enc` template function - same security level as the hand-written
+# mongo-secret.yaml this replaces. Base64 != encryption. Real secret
+# management (Sealed Secrets/SOPS/external store) is lesson 7 in docs/.
+
+mongo:
+  image:
+    repository: mongo
+    tag: "8"
+  service:
+    port: 27017
+  auth:
+    username: mongoadmin
+    password: password123
+
+webapp:
+  image:
+    repository: nanajanashia/k8s-demo-app
+    tag: v1.0
+  replicaCount: 1
+  containerPort: 3000
+  service:
+    type: NodePort
+    port: 3000
+    nodePort: 30007
+
