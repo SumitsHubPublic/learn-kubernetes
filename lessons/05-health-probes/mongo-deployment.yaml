@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+  labels:
+    app: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:8
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-root-username
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-root-password
+        # Startup: suspends liveness/readiness until Mongo finishes initialising.
+        # 12 * 5s = 60s total budget — plenty for mongo:8 first-boot journal setup.
+        startupProbe:
+          exec:
+            command:
+            - mongosh
+            - --eval
+            - "db.adminCommand('ping')"
+            - --quiet
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 12
+          timeoutSeconds: 5
+        # Liveness: restart the container if Mongo is completely unresponsive
+        livenessProbe:
+          exec:
+            command:
+            - mongosh
+            - --eval
+            - "db.adminCommand('ping')"
+            - --quiet
+          periodSeconds: 10
+          failureThreshold: 3
+          timeoutSeconds: 5
+        # Readiness: stop routing traffic if Mongo can't respond to queries
+        readinessProbe:
+          exec:
+            command:
+            - mongosh
+            - --eval
+            - "db.adminCommand('ping')"
+            - --quiet
+          periodSeconds: 10
+          failureThreshold: 3
+          timeoutSeconds: 5
