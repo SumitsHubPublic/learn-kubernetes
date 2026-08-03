@@ -64,8 +64,8 @@ Examples:
 |---|-------|--------|--------|
 | 1 | K8s Basics (Deployments, Services, ConfigMaps, Secrets) | `lessons/01-k8s-basics/` (on `main`) | done |
 | 2 | Helm | `lessons/02-helm/` (on `main`) | done |
-| 3 | Kustomize | `lesson/03-kustomize` | in progress |
-| 4 | Ingress | `lesson/04-ingress` | in progress |
+| 3 | Kustomize | `lesson/03-kustomize` | done |
+| 4 | Ingress | `lesson/04-ingress` | done |
 | 5 | Health Probes (liveness/readiness/startup) | `lesson/05-health-probes` | in progress |
 | 6 | Resource Requests & Limits | `lesson/06-resource-limits` | not started |
 | 7 | Persistent Volumes (Mongo data) | `lesson/07-persistent-volumes` | not started |
