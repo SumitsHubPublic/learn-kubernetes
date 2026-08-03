@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+spec:
+  # Changed from NodePort to ClusterIP — external access is now handled by Ingress,
+  # so this service only needs to be reachable inside the cluster.
+  type: ClusterIP
+  selector:
+    app: webapp
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
