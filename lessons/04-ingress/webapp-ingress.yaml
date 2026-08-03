@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webapp-ingress
+  namespace: default
+spec:
+  # ingressClassName tells Kubernetes which controller should process this resource.
+  # Minikube's nginx addon registers the class name "nginx".
+  ingressClassName: nginx
+  rules:
+  - host: webapp.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: webapp-service
+            port:
+              number: 3000
