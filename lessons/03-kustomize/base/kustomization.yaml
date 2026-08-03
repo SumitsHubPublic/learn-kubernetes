@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - mongo-config.yaml
+  - mongo-secret.yaml
+  - mongo-deployment.yaml
+  - mongo-service.yaml
+  - webapp-deployment.yaml
+  - webapp-service.yaml

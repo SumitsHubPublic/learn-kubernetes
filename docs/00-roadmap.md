@@ -64,7 +64,7 @@ Examples:
 |---|-------|--------|--------|
 | 1 | K8s Basics (Deployments, Services, ConfigMaps, Secrets) | `lessons/01-k8s-basics/` (on `main`) | done |
 | 2 | Helm | `lessons/02-helm/` (on `main`) | done |
-| 3 | Kustomize | `lesson/03-kustomize` | not started |
+| 3 | Kustomize | `lesson/03-kustomize` | in progress |
 | 4 | Ingress | `lesson/04-ingress` | not started |
 | 5 | Health Probes (liveness/readiness/startup) | `lesson/05-health-probes` | not started |
 | 6 | Resource Requests & Limits | `lesson/06-resource-limits` | not started |
