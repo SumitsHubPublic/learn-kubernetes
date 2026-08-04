@@ -69,7 +69,7 @@ Examples:
 | 5 | Health Probes (liveness/readiness/startup) | `lesson/05-health-probes` | in progress |
 | 6 | Resource Requests & Limits | `lesson/06-resource-limits` | in progress |
 | 7 | Persistent Volumes (Mongo data) | `lesson/07-persistent-volumes` | in progress |
-| 8 | Config & Secrets Management (Sealed Secrets / SOPS) | `lesson/08-config-secrets` | not started |
+| 8 | Config & Secrets Management (Sealed Secrets / SOPS) | `lesson/08-config-secrets` | in progress |
 | 9 | RBAC & Security (PSA, NetworkPolicy, non-root) | `lesson/09-rbac-security` | not started |
 | 10 | Horizontal Pod Autoscaler | `lesson/10-hpa` | not started |
 | 11 | Monitoring & Logging (Prometheus/Grafana, Loki) | `lesson/11-monitoring-logging` | not started |
