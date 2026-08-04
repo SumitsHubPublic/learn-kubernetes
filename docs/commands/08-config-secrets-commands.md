@@ -4,19 +4,40 @@ Commands in order. Run from the repo root unless stated otherwise.
 
 ---
 
-## 1. Add the Sealed Secrets Helm repo
+## Installation — Two methods
+
+### Method 1: Helm (recommended)
+
+Use this approach if Helm is working in your environment.
+
+### Method 2: Raw manifests (alternative)
+
+If Helm fails (especially in WSL2 with credential service errors), use this direct
+kubectl approach instead:
 
 ```bash
-helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
+kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.27.0/controller.yaml
+kubectl get pods -n kube-system -l app.kubernetes.io/name=sealed-secrets
+# Wait for 1/1 Running, then skip to step 4 below.
+```
+
+Both methods produce the same result. Choose the one that works for your environment.
+
+---
+
+## 1. Add the Sealed Secrets Helm repo (Helm method only)
+
+```bash
+helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
 ```
 
 ---
 
-## 2. Install the Sealed Secrets controller
+## 2. Install the Sealed Secrets controller (Helm method only)
 
 ```bash
-helm install sealed-secrets sealed-secrets/sealed-secrets \
+helm install sealed-secrets bitnami/sealed-secrets \
   -n kube-system \
   -f lessons/08-config-secrets/sealed-secrets-values.yaml
 ```
@@ -34,9 +55,13 @@ Wait for `1/1 Running`.
 
 ## 4. Install the kubeseal CLI (Linux / WSL2)
 
+### Option A: Dynamic version (auto-fetch latest)
+
 ```bash
 KUBESEAL_VERSION=$(curl -s https://api.github.com/repos/bitnami-labs/sealed-secrets/releases/latest \
   | grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/')
+
+echo $KUBESEAL_VERSION  # Verify it prints a version like 0.27.0
 
 curl -sSL \
   "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz" \
@@ -45,6 +70,23 @@ curl -sSL \
 sudo install -m 755 kubeseal /usr/local/bin/kubeseal
 kubeseal --version
 ```
+
+### Option B: Hardcoded version (simpler, if API fetch fails)
+
+If the dynamic approach fails (network issues, API limits), hardcode the version:
+
+```bash
+KUBESEAL_VERSION="0.27.0"
+
+curl -sSL \
+  "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz" \
+  | tar xz kubeseal
+
+sudo install -m 755 kubeseal /usr/local/bin/kubeseal
+kubeseal --version
+```
+
+Check [GitHub releases](https://github.com/bitnami-labs/sealed-secrets/releases) for the latest version if needed.
 
 ---
 

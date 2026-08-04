@@ -151,34 +151,76 @@ needed. The sealed secret file is what goes into git.
 
 ---
 
-## Step-by-step setup
+## Installation — Two methods
 
-### Step 1 — Install the Sealed Secrets controller via Helm
+The Sealed Secrets controller can be installed via **Helm** (recommended) or raw
+**kubectl manifests** (alternative for WSL2 or Helm credential issues).
+
+### Method 1: Helm (recommended)
 
 ```bash
-helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
+helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
-helm install sealed-secrets sealed-secrets/sealed-secrets \
+helm install sealed-secrets bitnami/sealed-secrets \
   -n kube-system \
   -f lessons/08-config-secrets/sealed-secrets-values.yaml
 ```
 
-Verify the controller pod is Running:
+### Method 2: Raw manifests (alternative)
+
+If Helm fails with credential service errors (common in WSL2):
+
+```bash
+kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.27.0/controller.yaml
+```
+
+Both methods produce an identical controller. Choose the one that works for your
+environment. Verify the pod is running (same for both):
+
 ```bash
 kubectl get pods -n kube-system -l app.kubernetes.io/name=sealed-secrets
+# Wait for 1/1 Running before proceeding
 ```
+
+---
+
+## Step-by-step setup
+
+### Step 1 — Install the controller (choose one method above)
+
+See **Installation — Two methods** section above. Pick Helm or raw manifests
+based on your environment.
 
 ### Step 2 — Install the kubeseal CLI
 
+**Option A: Dynamic version** (recommended if network is stable):
+
 ```bash
-# On Linux (WSL2):
 KUBESEAL_VERSION=$(curl -s https://api.github.com/repos/bitnami-labs/sealed-secrets/releases/latest \
   | grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/')
+
+echo $KUBESEAL_VERSION  # Verify it prints a version like 0.27.0
+
 curl -sSL "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz" \
   | tar xz kubeseal
+
 sudo install -m 755 kubeseal /usr/local/bin/kubeseal
 kubeseal --version
 ```
+
+**Option B: Hardcoded version** (fallback if API fetch fails):
+
+```bash
+KUBESEAL_VERSION="0.27.0"
+
+curl -sSL "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz" \
+  | tar xz kubeseal
+
+sudo install -m 755 kubeseal /usr/local/bin/kubeseal
+kubeseal --version
+```
+
+If the version is outdated, check [GitHub releases](https://github.com/bitnami-labs/sealed-secrets/releases).
 
 ### Step 3 — Seal the mongo secret
 
