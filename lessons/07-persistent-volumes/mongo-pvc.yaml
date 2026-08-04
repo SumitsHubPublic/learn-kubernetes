@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-data-pvc
+spec:
+  storageClassName: standard   # Minikube's default dynamic provisioner (hostPath)
+  accessModes:
+    - ReadWriteOnce             # one node can mount read/write at a time — correct for a single Mongo pod
+  resources:
+    requests:
+      storage: 1Gi
