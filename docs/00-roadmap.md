@@ -71,7 +71,7 @@ Examples:
 | 7 | Persistent Volumes (Mongo data) | `lesson/07-persistent-volumes` | in progress |
 | 8 | Config & Secrets Management (Sealed Secrets / SOPS) | `lesson/08-config-secrets` | in progress |
 | 9 | RBAC & Security (PSA, NetworkPolicy, non-root) | `lesson/09-rbac-security` | in progress |
-| 10 | Horizontal Pod Autoscaler | `lesson/10-hpa` | not started |
+| 10 | Horizontal Pod Autoscaler | `lesson/10-hpa` | in progress |
 | 11 | Monitoring & Logging (Prometheus/Grafana, Loki) | `lesson/11-monitoring-logging` | not started |
 | 12 | CI/CD (GitHub Actions) | `lesson/12-ci-cd` | not started |
 | 13 | GitOps (Argo CD) | `lesson/13-gitops-argocd` | not started |
