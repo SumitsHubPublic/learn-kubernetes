@@ -6,5 +6,5 @@ namespace: prod
 resources:
   - ../../base
 
-patches:
-  - path: webapp-deployment-patch.yaml
+patches: # list of patch files to apply to the base resources, overriding specific fields as needed
+  - path: webapp-deployment-patch.yaml # patch file for the webapp deployment in the production environment
