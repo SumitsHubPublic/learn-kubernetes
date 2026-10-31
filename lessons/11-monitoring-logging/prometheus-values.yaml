@@ -1,0 +1,21 @@
+grafana:
+  enabled: true
+  adminPassword: "admin"
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 30900
+  persistence:
+    enabled: false
+
+prometheus:
+  prometheusSpec:
+    retention: 7d
+    scrapeInterval: 15s
+    evaluationInterval: 15s
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+
+alertmanager:
+  enabled: false
