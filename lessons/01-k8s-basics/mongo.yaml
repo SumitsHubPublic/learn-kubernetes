@@ -6,12 +6,12 @@ metadata:
     app: mongo
 spec:
   replicas: 1  # how many pods you want to create
-  selector:
+  selector: # this is how the deployment finds which pods to manage
     matchLabels:
       app: mongo
   template:  # this is the pod template -> blueprint for the pod
     metadata:
-      labels:
+      labels: # labels for the pod, used by the selector to match this pod
         app: mongo
     spec:
       containers:

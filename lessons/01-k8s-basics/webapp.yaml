@@ -19,7 +19,7 @@ spec:
         image: nanajanashia/k8s-demo-app:v1.0
         ports:
         - containerPort: 3000
-        env:
+        env: # environment variables for the container, can be sourced from secrets or config maps
         - name: USER_NAME
           valueFrom:
             secretKeyRef:
